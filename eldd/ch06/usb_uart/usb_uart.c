@@ -36,7 +36,7 @@ static struct uart_port usb_uart_port[]; /* Defined later on */
 /* Write a character to the USB_UART port */
 static void usb_uart_putc(struct uart_port *port, unsigned char c)
 {
-     /* Write untile there is space in the TX FIFO of the USB_UART.
+     /* Write until there is space in the TX FIFO of the USB_UART.
       * Sense this by looking at the USB_UART_TX_FULL bit in the 
       * status register */
     while (__raw_readb(port->membase) & USB_UART_TX_FULL);
@@ -170,7 +170,7 @@ static void usb_uart_start_tx(struct uart_port *port)
 }
 
 /* The UART operations structure */
-static struct uart_opts usb_uart_ops = {
+static struct uart_ops usb_uart_ops = {
     .start_tx   =   usb_uart_start_tx,  /* Start transmitting */
     .startup   =   usb_uart_startup,  /* App opens USB_UART */
     .shutdown   =   usb_uart_shutdown,  /* App closes USB_UART */
@@ -272,7 +272,7 @@ static platform_device *usb_uart_plat_device2; /* Platform device for USB_UART 2
 static struct platform_driver usb_uart_driver = {
     .probe  =   usb_uart_probe, /*  Probe method */
     .remove =   __exit_p(usb_uart_remove), /* Detach method */
-    .suspend =   usb_uart_suspend, /* Power suspend */
+    .suspend =  usb_uart_suspend, /* Power suspend */
     .resume =   usb_uart_resume, /* Resume after a suspend */
     .driver =   {
         .name = "usb_uart", /* Driver name */
@@ -296,7 +296,6 @@ static int __init usb_uart_init(void)
         uart_unregister_driver(&usb_uart_reg);
         return PTR_ERR(usb_uart_plat_device1);
     }
-
 
     /* Register platform device for USB_UART 2. Usually called 
      * during architecture-specific setup */
